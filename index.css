@@ -25,6 +25,7 @@ nav{
     display: flex;
     position: fixed;
     z-index: 10;
+    align-items: center;
 }
 
 /*Styling logo*/
@@ -37,8 +38,22 @@ nav{
     width: 5rem;
 }
 
+/* Checkbox input hidden */
+input[type="checkbox"] {
+    display: none;
+}
+
+/* Toggle label styling for mobile */
+.toggle {
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #f2f5f7;
+    padding: 0 1rem;
+}
+
 /*Styling Links*/
-.nav-links{
+.nav-links, .menu {
     display: flex;
     list-style: none; 
     width: 88vw;
@@ -47,18 +62,23 @@ nav{
     align-items: center;
     text-transform: uppercase;
 }
-.nav-links li a{
+
+.nav-links li, .menu li {
+    position: relative;
+}
+
+.nav-links li a, .menu li a {
     text-decoration: none;
     margin: 0 0.7vw;
     display: block;
+    padding: 0.7rem 1rem;
 }
-.nav-links li a:hover {
+
+.nav-links li a:hover, .menu li a:hover {
     color: #61DAFB;
 }
-.nav-links li {
-    position: relative;
-}
-.nav-links li a::before {
+
+.nav-links li a::before, .menu li a::before {
     content: "";
     display: block;
     height: 3px;
@@ -68,12 +88,13 @@ nav{
     transition: all ease-in-out 250ms;
     margin: 0 0 0 10%;
 }
-.nav-links li a:hover::before{
+
+.nav-links li a:hover::before, .menu li a:hover::before {
     width: 80%;
 }
 
-/* Desktop Submenu styling */
-.submenu {
+/* Desktop submenu styling */
+.menu li ul {
     display: none;
     list-style: none;
     position: absolute;
@@ -85,46 +106,46 @@ nav{
     border-radius: 4px;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
     padding: 0.8rem 0;
-    margin-top: 0;
+    margin-top: 0.5rem;
     z-index: 20;
 }
 
-/* Show submenu on hover - keep visible while hovering */
-.nav-links > li:hover .submenu {
+/* Show submenu on hover (desktop) */
+.menu li:hover > ul {
     display: flex;
 }
 
-.submenu li {
+.menu li ul li {
     padding: 0;
-    position: relative;
 }
 
-.submenu li a {
-    display: block;
+.menu li ul li a {
     padding: 0.7rem 1.5rem;
     transition: all 0.3s ease;
     color: #f2f5f7;
     text-decoration: none;
     font-size: 0.9rem;
     white-space: nowrap;
+    margin: 0;
 }
 
-.submenu li a:hover {
+.menu li ul li a:hover {
     background-color: rgba(97, 218, 251, 0.15);
     padding-left: 2rem;
     color: #61DAFB;
 }
 
 /* Nested submenu for desktop */
-.submenu .submenu {
+.menu li ul li ul {
     position: absolute;
     top: 0;
     left: 100%;
     margin-left: 0.5rem;
+    margin-top: -0.8rem;
     display: none;
 }
 
-.submenu li:hover > .submenu {
+.menu li ul li:hover > ul {
     display: flex;
 }
 
@@ -137,18 +158,6 @@ nav{
     margin-left: 2vw;
     font-size: 1rem;
     cursor: pointer;
-}
-
-/*Styling Hamburger Icon*/
-.hamburger div{
-    width: 30px;
-    height:3px;
-    background: #f2f5f7;
-    margin: 5px;
-    transition: all 0.3s ease;
-}
-.hamburger{
-    display: none;
 }
 
 /*Styling for small screens*/
@@ -168,91 +177,59 @@ nav{
     nav{
         position: fixed;
         z-index: 3;
+        justify-content: space-between;
         height: auto;
     }
-    .hamburger{
-        display: block;
-        position: absolute;
-        cursor: pointer;
-        right: 5%;
-        top: 50%;
-        transform: translate(-5%, -50%);
-        z-index: 2;
-        transition: all 0.7s ease;
+    
+    .logo {
+        order: 1;
+        padding: 0.5rem;
     }
-    .nav-links{
+    
+    .logo img {
+        height: 3rem;
+        width: 3rem;
+    }
+    
+    .toggle {
+        display: block;
+        order: 2;
+    }
+
+    .nav-links, .menu {
         position: fixed;
         background: #131418;
         height: 100vh;
         width: 100%;
         flex-direction: column;
-        clip-path: circle(50px at 90% -20%);
-        -webkit-clip-path: circle(50px at 90% -10%);
-        transition: all 1s ease-out;
-        pointer-events: none;
-        overflow-y: auto;
         padding-top: 6rem;
+        width: 100vw;
+        padding-left: 0;
+        padding-right: 0;
         justify-content: flex-start;
         align-items: stretch;
-        padding-right: 0;
-        width: 100vw;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
     }
-    .nav-links.open{
-        clip-path: circle(1000px at 90% -10%);
-        -webkit-clip-path: circle(1000px at 90% -10%);
-        pointer-events: all;
+
+    /* Toggle checkbox for main menu */
+    #drop:checked ~ .menu {
+        max-height: 100vh;
+        overflow-y: auto;
     }
-    .nav-links li{
-        opacity: 0;
+
+    .nav-links li, .menu li {
+        opacity: 1;
         list-style: none;
         width: 100%;
         text-align: left;
         padding: 0;
         margin: 0;
     }
-    .nav-links li:nth-child(1){
-        transition: all 0.5s ease 0.2s;
-    }
-    .nav-links li:nth-child(2){
-        transition: all 0.5s ease 0.4s;
-    }
-    .nav-links li:nth-child(3){
-        transition: all 0.5s ease 0.6s;
-    }
-    .nav-links li:nth-child(4){
-        transition: all 0.5s ease 0.7s;
-    }
-    .nav-links li:nth-child(5){
-        transition: all 0.5s ease 0.8s;
-    }
-    
-    .nav-links li.fade{
-        opacity: 1;
-    }
 
     /* Mobile submenu styling */
-    .nav-links > li > a {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .nav-links > li > a::after {
-        content: '▼';
-        font-size: 0.6rem;
-        margin-left: 0.5rem;
-        transition: transform 0.3s ease;
-    }
-
-    /* Hide arrow for items without submenu */
-    .nav-links > li:not(:has(.submenu)) > a::after {
-        content: '';
-    }
-
-    .submenu {
+    .menu li ul {
         position: static;
         background-color: rgba(97, 218, 251, 0.08);
         max-height: 0;
@@ -265,66 +242,70 @@ nav{
         min-width: unset;
         top: auto;
         left: auto;
-        display: flex;
-        flex-direction: column;
-        z-index: 1;
     }
 
-    .submenu.open {
+    /* Toggle checkbox for submenus */
+    #drop-1:checked ~ ul,
+    #drop-2:checked ~ ul,
+    #drop-3:checked ~ ul,
+    #drop-1-1:checked ~ ul {
         max-height: 1000px;
         padding: 0.5rem 0;
     }
 
-    .submenu li a {
+    /* Menu items with checkboxes */
+    .menu li label {
+        display: block;
+        padding: 1rem 1.5rem;
+        cursor: pointer;
+        width: 100%;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        color: #f2f5f7;
+    }
+
+    .menu li label:hover {
+        color: #61DAFB;
+        background-color: rgba(97, 218, 251, 0.05);
+    }
+
+    .menu li a {
+        display: none;
+    }
+
+    .menu li ul li a {
         padding: 0.8rem 1.5rem 0.8rem 2.5rem;
         font-size: 0.85rem;
         font-weight: 400;
         text-transform: none;
         display: block;
+        margin: 0;
     }
 
-    .submenu li a:hover {
+    .menu li ul li a:hover {
         background-color: rgba(97, 218, 251, 0.2);
         padding-left: 3rem;
     }
 
     /* Nested submenu styling */
-    .submenu .submenu {
-        margin-left: 0;
+    .menu li ul li ul {
         background-color: rgba(97, 218, 251, 0.12);
-    }
-
-    .submenu > li > a::after {
-        content: '▶';
-        font-size: 0.5rem;
-        margin-left: 0.5rem;
-        transition: transform 0.3s ease;
-    }
-
-    /* Hide arrow for items without nested submenu */
-    .submenu > li:not(:has(.submenu)) > a::after {
-        content: '';
+        margin: 0;
     }
 
     /* Prevent hover effects on mobile */
-    .nav-links li:hover .submenu {
+    .menu li:hover > ul {
+        max-height: 0;
+        display: flex;
+    }
+
+    .menu li ul li:hover > ul {
         display: flex;
         max-height: 0;
     }
-
-    .submenu li:hover .submenu {
-        max-height: 0;
-    }
 }
 
-/*Animating Hamburger Icon on Click*/
-.toggle .line1{
-    transform: rotate(-45deg) translate(-5px,6px);
-}
-.toggle .line2{
-    transition: all 0.7s ease;
-    width:0;
-}
-.toggle .line3{
-    transform: rotate(45deg) translate(-5px,-6px);
+/*Animating Toggle Icon on Click*/
+#drop:checked ~ .toggle {
+    transform: rotate(90deg);
 }

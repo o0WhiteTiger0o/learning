@@ -17,8 +17,8 @@ hamburger.addEventListener('click', () => {
 const navItems = document.querySelectorAll(".nav-links > li");
 
 navItems.forEach(item => {
-    const submenu = item.querySelector(".submenu");
     const link = item.querySelector("a");
+    const submenu = item.querySelector(".submenu");
     
     if (submenu) {
         link.addEventListener('click', (e) => {
@@ -27,13 +27,38 @@ navItems.forEach(item => {
                 e.preventDefault();
                 submenu.classList.toggle("open");
                 
-                // Close other submenus
+                // Close other submenus at same level
                 navItems.forEach(otherItem => {
                     if (otherItem !== item) {
                         const otherSubmenu = otherItem.querySelector(".submenu");
-                        if (otherSubmenu) {
+                        if (otherSubmenu && !otherSubmenu.querySelector(".submenu.open")) {
                             otherSubmenu.classList.remove("open");
                         }
+                    }
+                });
+            }
+        });
+    }
+});
+
+// Handle nested submenu clicks on mobile
+const allSubmenuItems = document.querySelectorAll(".submenu li");
+
+allSubmenuItems.forEach(item => {
+    const link = item.querySelector("a");
+    const nestedSubmenu = item.querySelector(".submenu");
+    
+    if (nestedSubmenu) {
+        link.addEventListener('click', (e) => {
+            if (window.innerWidth <= 500) {
+                e.preventDefault();
+                nestedSubmenu.classList.toggle("open");
+                
+                // Close other nested submenus at same level
+                const parentSubmenu = item.parentElement;
+                parentSubmenu.querySelectorAll(":scope > li > .submenu").forEach(menu => {
+                    if (menu !== nestedSubmenu) {
+                        menu.classList.remove("open");
                     }
                 });
             }
@@ -44,6 +69,6 @@ navItems.forEach(item => {
 // Close menus on resize
 window.addEventListener('resize', () => {
     if (window.innerWidth > 500) {
-        document.querySelectorAll(".submenu").forEach(m => m.classList.remove("open"));
+        document.querySelectorAll(".submenu.open").forEach(m => m.classList.remove("open"));
     }
 });

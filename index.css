@@ -74,6 +74,58 @@ nav{
     width: 80%;
 }
 
+/* Submenu styling for desktop */
+.submenu {
+    display: none;
+    list-style: none;
+    position: absolute;
+    background-color: #0a0d0f;
+    flex-direction: column;
+    width: 200px;
+    top: 100%;
+    left: 0;
+    border-radius: 4px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    z-index: 20;
+}
+
+.nav-links li:hover .submenu {
+    display: flex;
+}
+
+.submenu li {
+    padding: 0;
+    position: relative;
+}
+
+.submenu li a {
+    display: block;
+    padding: 0.7rem 1.5rem;
+    transition: all 0.3s ease;
+    color: #f2f5f7;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.submenu li a:hover {
+    background-color: rgba(97, 218, 251, 0.1);
+    padding-left: 2rem;
+    color: #61DAFB;
+}
+
+/* Multi-level submenu */
+.submenu .submenu {
+    top: 0;
+    left: 100%;
+    margin-top: 0;
+}
+
+.submenu li:hover .submenu {
+    display: flex;
+}
+
 /*Styling Buttons*/
 .login-button{
     background-color: transparent;
@@ -136,6 +188,7 @@ nav{
         -webkit-clip-path: circle(50px at 90% -10%);
         transition: all 1s ease-out;
         pointer-events: none;
+        overflow-y: auto;
     }
     .nav-links.open{
         clip-path: circle(1000px at 90% -10%);
@@ -160,24 +213,54 @@ nav{
     .nav-links li:nth-child(5){
         transition: all 0.5s ease 0.8s;
     }
-    .nav-links li:nth-child(6){
-        transition: all 0.5s ease 0.9s;
-        margin: 0;
-    }
-    .nav-links li:nth-child(7){
-        transition: all 0.5s ease 1s;
-        margin: 0;
-    }
-    .nav-links li:nth-child(8){
-        transition: all 0.5s ease 1.2s;
-        margin: 0;
-    }
-    .nav-links li:nth-child(9){
-        transition: all 0.5s ease 1.4s;
-        margin: 0;
-    }
     li.fade{
         opacity: 1;
+    }
+
+    /* Mobile submenu styling */
+    .submenu {
+        position: static;
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(97, 218, 251, 0.05);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        padding: 0;
+        margin-top: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .submenu.open {
+        max-height: 500px;
+        display: flex;
+        padding: 0.5rem 0;
+    }
+
+    .nav-links li:hover .submenu {
+        display: none;
+    }
+
+    .submenu li a {
+        padding: 0.7rem 2rem 0.7rem 2.5rem;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+
+    .submenu li a:hover {
+        padding-left: 3rem;
+    }
+
+    /* Nested submenus on mobile */
+    .submenu .submenu {
+        top: auto;
+        left: auto;
+    }
+
+    .submenu li a::after {
+        content: '';
     }
 
 }

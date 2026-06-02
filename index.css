@@ -25,7 +25,6 @@ nav{
     display: flex;
     position: fixed;
     z-index: 10;
-    
 }
 
 /*Styling logo*/
@@ -51,13 +50,13 @@ nav{
 .nav-links li a{
     text-decoration: none;
     margin: 0 0.7vw;
+    display: block;
 }
 .nav-links li a:hover {
     color: #61DAFB;
 }
 .nav-links li {
     position: relative;
-    
 }
 .nav-links li a::before {
     content: "";
@@ -68,13 +67,12 @@ nav{
     position: absolute;
     transition: all ease-in-out 250ms;
     margin: 0 0 0 10%;
-    
 }
 .nav-links li a:hover::before{
     width: 80%;
 }
 
-/* Submenu styling for desktop */
+/* Desktop Submenu styling */
 .submenu {
     display: none;
     list-style: none;
@@ -82,16 +80,17 @@ nav{
     background-color: #0a0d0f;
     flex-direction: column;
     min-width: 220px;
-    top: calc(100% - 0.5rem);
+    top: 100%;
     left: 0;
     border-radius: 4px;
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-    padding: 1rem 0;
+    padding: 0.8rem 0;
     margin-top: 0;
     z-index: 20;
 }
 
-.nav-links li:hover > .submenu {
+/* Show submenu on hover - keep visible while hovering */
+.nav-links > li:hover .submenu {
     display: flex;
 }
 
@@ -111,14 +110,15 @@ nav{
 }
 
 .submenu li a:hover {
-    background-color: rgba(97, 218, 251, 0.1);
+    background-color: rgba(97, 218, 251, 0.15);
     padding-left: 2rem;
     color: #61DAFB;
 }
 
-/* Multi-level submenu */
+/* Nested submenu for desktop */
 .submenu .submenu {
-    top: -0.5rem;
+    position: absolute;
+    top: 0;
     left: 100%;
     margin-left: 0.5rem;
     display: none;
@@ -137,7 +137,6 @@ nav{
     margin-left: 2vw;
     font-size: 1rem;
     cursor: pointer;
-
 }
 
 /*Styling Hamburger Icon*/
@@ -152,7 +151,7 @@ nav{
     display: none;
 }
 
-/*Stying for small screens*/
+/*Styling for small screens*/
 @media screen and (max-width: 500px){
     body{
         overflow-x: hidden;
@@ -169,9 +168,10 @@ nav{
     nav{
         position: fixed;
         z-index: 3;
+        height: auto;
     }
     .hamburger{
-        display:block;
+        display: block;
         position: absolute;
         cursor: pointer;
         right: 5%;
@@ -191,7 +191,11 @@ nav{
         transition: all 1s ease-out;
         pointer-events: none;
         overflow-y: auto;
-        padding-top: 1rem;
+        padding-top: 6rem;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding-right: 0;
+        width: 100vw;
     }
     .nav-links.open{
         clip-path: circle(1000px at 90% -10%);
@@ -202,6 +206,9 @@ nav{
         opacity: 0;
         list-style: none;
         width: 100%;
+        text-align: left;
+        padding: 0;
+        margin: 0;
     }
     .nav-links li:nth-child(1){
         transition: all 0.5s ease 0.2s;
@@ -218,16 +225,35 @@ nav{
     .nav-links li:nth-child(5){
         transition: all 0.5s ease 0.8s;
     }
-    li.fade{
+    
+    .nav-links li.fade{
         opacity: 1;
     }
 
     /* Mobile submenu styling */
+    .nav-links > li > a {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .nav-links > li > a::after {
+        content: '▼';
+        font-size: 0.6rem;
+        margin-left: 0.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    /* Hide arrow for items without submenu */
+    .nav-links > li:not(:has(.submenu)) > a::after {
+        content: '';
+    }
+
     .submenu {
         position: static;
-        display: none !important;
-        flex-direction: column;
-        width: 100%;
         background-color: rgba(97, 218, 251, 0.08);
         max-height: 0;
         overflow: hidden;
@@ -239,77 +265,58 @@ nav{
         min-width: unset;
         top: auto;
         left: auto;
+        display: flex;
+        flex-direction: column;
+        z-index: 1;
     }
 
     .submenu.open {
-        display: flex !important;
-        max-height: 800px;
+        max-height: 1000px;
         padding: 0.5rem 0;
     }
 
-    .submenu.open .submenu {
-        display: none !important;
-    }
-
-    .submenu.open .submenu.open {
-        display: flex !important;
-        background-color: rgba(97, 218, 251, 0.12);
-    }
-
-    .nav-links li:hover .submenu {
-        display: none !important;
-    }
-
-    .nav-links li > a {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.7rem 1.5rem;
-        width: 100%;
-    }
-
-    .nav-links li > a::after {
-        content: '▼';
-        font-size: 0.7rem;
-        margin-left: 0.5rem;
-        transition: transform 0.3s ease;
-    }
-
-    .nav-links li > a:not(:has(+ .submenu))::after {
-        content: '';
-    }
-
     .submenu li a {
-        padding: 0.7rem 2rem 0.7rem 2.5rem;
+        padding: 0.8rem 1.5rem 0.8rem 2.5rem;
         font-size: 0.85rem;
-        text-align: left;
-        width: 100%;
+        font-weight: 400;
+        text-transform: none;
         display: block;
     }
 
     .submenu li a:hover {
+        background-color: rgba(97, 218, 251, 0.2);
         padding-left: 3rem;
     }
 
-    /* Nested submenus on mobile */
+    /* Nested submenu styling */
     .submenu .submenu {
-        top: auto;
-        left: auto;
-        margin: 0;
+        margin-left: 0;
+        background-color: rgba(97, 218, 251, 0.12);
     }
 
-    .submenu li > a::after {
+    .submenu > li > a::after {
         content: '▶';
-        font-size: 0.6rem;
+        font-size: 0.5rem;
         margin-left: 0.5rem;
         transition: transform 0.3s ease;
     }
 
-    .submenu li > a:not(:has(+ .submenu))::after {
+    /* Hide arrow for items without nested submenu */
+    .submenu > li:not(:has(.submenu)) > a::after {
         content: '';
     }
 
+    /* Prevent hover effects on mobile */
+    .nav-links li:hover .submenu {
+        display: flex;
+        max-height: 0;
+    }
+
+    .submenu li:hover .submenu {
+        max-height: 0;
+    }
 }
+
 /*Animating Hamburger Icon on Click*/
 .toggle .line1{
     transform: rotate(-45deg) translate(-5px,6px);

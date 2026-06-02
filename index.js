@@ -2,73 +2,75 @@ const hamburger = document.querySelector(".hamburger");
 const navLinks = document.querySelector(".nav-links");
 const links = document.querySelectorAll(".nav-links > li");
 
+// Hamburger menu toggle
 hamburger.addEventListener('click', () => {
-    // Animate Links
     navLinks.classList.toggle("open");
     links.forEach(link => {
         link.classList.toggle("fade");
     });
-
-    // Hamburger Animation
     hamburger.classList.toggle("toggle");
 });
 
-// Mobile submenu toggle
-const navItems = document.querySelectorAll(".nav-links > li");
-
-navItems.forEach(item => {
-    const link = item.querySelector("a");
-    const submenu = item.querySelector(".submenu");
+// Mobile submenu functionality
+if (window.innerWidth <= 500) {
+    // Main menu items with submenus
+    const mainMenuItems = document.querySelectorAll(".nav-links > li > a");
     
-    if (submenu) {
-        link.addEventListener('click', (e) => {
-            // Only toggle on mobile
-            if (window.innerWidth <= 500) {
-                e.preventDefault();
-                submenu.classList.toggle("open");
-                
-                // Close other submenus at same level
-                navItems.forEach(otherItem => {
-                    if (otherItem !== item) {
-                        const otherSubmenu = otherItem.querySelector(".submenu");
-                        if (otherSubmenu && !otherSubmenu.querySelector(".submenu.open")) {
-                            otherSubmenu.classList.remove("open");
+    mainMenuItems.forEach(link => {
+        const parentLi = link.parentElement;
+        const submenu = parentLi.querySelector(".submenu");
+        
+        if (submenu) {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 500) {
+                    e.preventDefault();
+                    
+                    // Close other main menus
+                    document.querySelectorAll(".nav-links > li .submenu.open").forEach(menu => {
+                        if (menu !== submenu) {
+                            menu.classList.remove('open');
                         }
-                    }
-                });
-            }
-        });
-    }
-});
-
-// Handle nested submenu clicks on mobile
-const allSubmenuItems = document.querySelectorAll(".submenu li");
-
-allSubmenuItems.forEach(item => {
-    const link = item.querySelector("a");
-    const nestedSubmenu = item.querySelector(".submenu");
+                    });
+                    
+                    submenu.classList.toggle('open');
+                }
+            });
+        }
+    });
     
-    if (nestedSubmenu) {
-        link.addEventListener('click', (e) => {
-            if (window.innerWidth <= 500) {
-                e.preventDefault();
-                nestedSubmenu.classList.toggle("open");
-                
-                // Close other nested submenus at same level
-                const parentSubmenu = item.parentElement;
-                parentSubmenu.querySelectorAll(":scope > li > .submenu").forEach(menu => {
-                    if (menu !== nestedSubmenu) {
-                        menu.classList.remove("open");
-                    }
-                });
-            }
-        });
-    }
-});
+    // Nested submenu items
+    const nestedMenuItems = document.querySelectorAll(".submenu > li > a");
+    
+    nestedMenuItems.forEach(link => {
+        const parentLi = link.parentElement;
+        const nestedSubmenu = parentLi.querySelector(".submenu");
+        
+        if (nestedSubmenu) {
+            link.addEventListener('click', function(e) {
+                if (window.innerWidth <= 500) {
+                    e.preventDefault();
+                    
+                    // Close other nested menus at same level
+                    const parentSubmenu = parentLi.parentElement;
+                    parentSubmenu.querySelectorAll(".submenu.open").forEach(menu => {
+                        if (menu !== nestedSubmenu) {
+                            menu.classList.remove('open');
+                        }
+                    });
+                    
+                    nestedSubmenu.classList.toggle('open');
+                }
+            });
+        }
+    });
+}
 
-// Close menus on resize
+// Update on window resize
 window.addEventListener('resize', () => {
     if (window.innerWidth > 500) {
-        document.querySelectorAll(".submenu.open").forEach(m => m.classList.remove("open"));
+        // Remove all open classes when resizing to desktop
+        document.querySelectorAll(".submenu.open").forEach(menu => {
+            menu.classList.remove('open');
+        });
     }
 });
